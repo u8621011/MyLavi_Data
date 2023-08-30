@@ -101,16 +101,22 @@ def check_user_learning_topic(user_message, verbose=False):
         user_message
     ]
 
+    if verbose:
+        print('------------------- begin -------------------')
+        print('check_user_learning_topic executing')
+        print(f'prompt: {prompt}')
+
     # 呼叫 ChatCompletion
     response = get_completion_from_messages(messages)
 
     if verbose:
-        print(f'check_user_learning_topic response: {response}')
+        print(f'response: {response}')
+        print('-------------------- end --------------------')
 
     return response
 
 
-def get_learning_topic_ta_prompt(user_message, settings):
+def get_learning_topic_ta_prompt(user_message, settings, verbose=False):
     """
     引導學生表達他們學習目標的助教
     """
@@ -138,8 +144,17 @@ def get_learning_topic_ta_prompt(user_message, settings):
 
     ]
 
+    if verbose:
+        print('------------------- begin -------------------')
+        print('get_learning_topic_ta_prompt executing')
+        print(f'prompt: {prompt}')
+
     # 呼叫 ChatCompletion
     response = get_completion_from_messages(messages)
+
+    if verbose:
+        print(f'response: {response}')
+        print('-------------------- end --------------------')
 
     return response
 
@@ -156,27 +171,36 @@ def get_lex_suggestion_ta_prompt(user_message, settings, verbose=False):
     learning_lang = settings['learning_lang']
     learning_content  = settings['learning_content']
 
+    prompt = f"""
+    你是一個專業的外語老師。
+    請依照使用者的學習背景以及學習內容，隨機挑選一個單字來做教學。
+
+    學習背景：
+    學生的母語： {user_lang}
+    想要學習的語言： {learning_lang}
+
+    學習內容：
+    {learning_content}
+    """
+
     messages =  [
         {
             'role':'system',
-            'content': f""""你是一個專業的外語老師。
-            請依照使用者的學習背景以及學習內容，隨機挑選一個單字來做教學。
-
-            學習背景：
-            學生的母語： {user_lang}
-            想要學習的語言： {learning_lang}
-
-            學習內容：
-            {learning_content}
-            """
+            'content': prompt
         },
         user_message
     ]
+
+    if verbose:
+        print('------------------- begin -------------------')
+        print('get_lex_suggestion_ta_prompt executing')
+        print(f'prompt: {prompt}')
 
     # 呼叫 ChatCompletion
     response = get_completion_from_messages(messages)
 
     if verbose:
-        print(response)
+        print(f'response: {response}')
+        print('-------------------- end --------------------')
 
     return response
